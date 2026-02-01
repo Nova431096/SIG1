@@ -1,48 +1,102 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SIG1</title>
-  <style>
-    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.35; }
-    body { margin: 0; padding: 24px; background: #0b0f14; color: #e7eef7; }
-    .wrap { max-width: 980px; margin: 0 auto; }
-    h1 { margin: 0 0 14px; font-size: 22px; }
-    .card { background: #121a24; border: 1px solid #213042; border-radius: 14px; padding: 16px; box-shadow: 0 6px 20px rgba(0,0,0,.25); }
-    .row { display: grid; grid-template-columns: 1fr; gap: 10px; }
-    label { font-size: 12px; color: #a9b7c7; display: block; margin: 0 0 6px; }
-    input, textarea, button {
-      width: 100%; box-sizing: border-box;
-      border-radius: 10px; border: 1px solid #2a3b52;
-      background: #0f1520; color: #e7eef7; padding: 10px 12px;
-      font: inherit;
-    }
-    textarea { min-height: 110px; resize: vertical; }
-    button { cursor: pointer; background: #1b2a3d; border-color: #2f4764; }
-    button:hover { background: #22344b; }
-    .tabs { display: flex; gap: 10px; margin: 14px 0 10px; }
-    .tab { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #2a3b52; background: #0f1520; color: #e7eef7; cursor: pointer; }
-    .tab.active { background: #1b2a3d; border-color: #2f4764; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    .small { font-size: 12px; color: #a9b7c7; }
-    .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-    .actions button { width: auto; padding: 10px 14px; }
-    .ok { color: #73e6a5; }
-    .err { color: #ff7b7b; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SIG1</title>
+
+<style>
+  :root {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height: 1.35;
+  }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #0b0f14;
+    color: #e7eef7;
+  }
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 22px;
+  }
+  .card {
+    background: #121a24;
+    border: 1px solid #213042;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  }
+  label {
+    font-size: 12px;
+    color: #a9b7c7;
+    display: block;
+    margin-bottom: 6px;
+  }
+  input, textarea, button {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid #2a3b52;
+    background: #0f1520;
+    color: #e7eef7;
+    padding: 10px 12px;
+    font: inherit;
+  }
+  textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+  button {
+    cursor: pointer;
+    background: #1b2a3d;
+    border-color: #2f4764;
+  }
+  button:hover {
+    background: #22344b;
+  }
+  .tabs {
+    display: flex;
+    gap: 10px;
+    margin: 16px 0;
+  }
+  .tab {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #2a3b52;
+    background: #0f1520;
+    cursor: pointer;
+  }
+  .tab.active {
+    background: #1b2a3d;
+    border-color: #2f4764;
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .ok { color: #73e6a5; }
+  .err { color: #ff7b7b; }
+</style>
 </head>
+
 <body>
 <div class="wrap">
   <h1>SIG1</h1>
 
   <div class="card">
-    <div class="row">
-      <div>
-        <label>Shared Key</label>
-        <input id="key" class="mono" />
-      </div>
-    </div>
+    <label>Shared Key</label>
+    <input id="key" class="mono">
 
     <div class="tabs">
       <button class="tab active" id="tabDecrypt">Decrypt</button>
@@ -60,12 +114,10 @@
       </div>
 
       <label style="margin-top:12px;">Raw Output</label>
-      <textarea id="outPlain" class="mono" readonly></textarea>
+      <textarea id="outRaw" class="mono" readonly></textarea>
 
       <label style="margin-top:12px;">Cleaned Output</label>
       <textarea id="outClean" readonly></textarea>
-
-      <div id="statusD" class="small"></div>
     </div>
 
     <!-- Encrypt -->
@@ -76,83 +128,153 @@
       <div class="actions">
         <button id="btnEncrypt">Encrypt</button>
         <button id="btnNonce">New Nonce</button>
-        <button id="btnClearE">Clear</button>
       </div>
 
-      <div class="row" style="margin-top:12px;">
-        <div>
-          <label>Nonce</label>
-          <input id="nonce" class="mono" maxlength="6" />
-        </div>
-      </div>
+      <label style="margin-top:12px;">Nonce</label>
+      <input id="nonce" class="mono" maxlength="6">
 
       <label style="margin-top:12px;">Payload</label>
-      <input id="payloadOut" class="mono" readonly />
+      <input id="payloadOut" class="mono" readonly>
 
       <label style="margin-top:12px;">Ciphertext</label>
       <textarea id="cipherOut" class="mono" readonly></textarea>
-
-      <div id="statusE" class="small"></div>
     </div>
   </div>
 </div>
 
 <script>
-const A_CODE="A".charCodeAt(0),el=id=>document.getElementById(id),mod26=n=>(n%26+26)%26,toIdx=c=>c.charCodeAt(0)-A_CODE,toCh=i=>String.fromCharCode(A_CODE+i);
-const cleanAZ=s=>(s||"").toUpperCase().replace(/[^A-Z]/g,"");
-async function sha256Bytes(str){const d=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(str));return new Uint8Array(d)}
-async function* byteStream(seed){let b=await sha256Bytes(seed);while(true){yield* b;b=await crypto.subtle.digest("SHA-256",b).then(x=>new Uint8Array(x))}}
-async function buildMachine(key,nonce){
-  const stream=byteStream(`SIG1|${key}|${nonce}`),next=async()=> (await stream.next()).value;
-  async function randInt(n){const lim=Math.floor(256/n)*n;while(true){const b=await next();if(b<lim)return b%n}}
-  async function rotor(){const r=[...Array(26).keys()];for(let i=25;i>0;i--){const j=await randInt(i+1);[r[i],r[j]]=[r[j],r[i]]}return r}
-  const r0=await rotor(),r1=await rotor(),r2=await rotor(),inv=r=>r.reduce((a,v,i)=>(a[v]=i,a),Array(26));
-  const ir0=inv(r0),ir1=inv(r1),ir2=inv(r2);
-  const ref=new Array(26).fill(-1),u=[...Array(26).keys()];
-  while(u.length){const a=u.splice(await randInt(u.length),1)[0];if((await randInt(100))<20||!u.length){ref[a]=a;continue}
-    const b=u.splice(await randInt(u.length),1)[0];ref[a]=b;ref[b]=a}
-  return {r0,r1,r2,ir0,ir1,ir2,ref,o0:(await next())%26,o1:(await next())%26,o2:(await next())%26}
+const A = "A".charCodeAt(0);
+const el = id => document.getElementById(id);
+const mod26 = n => (n % 26 + 26) % 26;
+const toIdx = c => c.charCodeAt(0) - A;
+const toCh = i => String.fromCharCode(A + i);
+const cleanAZ = s => (s || "").toUpperCase().replace(/[^A-Z]/g,"");
+
+async function sha256(str){
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return new Uint8Array(buf);
 }
-function step(s){if(++s.o2===26){s.o2=0;if(++s.o1===26){s.o1=0;s.o0=(s.o0+1)%26}}}
-const fwd=(x,r,o)=>mod26(r[mod26(x+o)]-o),inv=(x,r,o)=>mod26(r[mod26(x+o)]-o);
-function xform(x,s){x=fwd(x,s.r0,s.o0);x=fwd(x,s.r1,s.o1);x=fwd(x,s.r2,s.o2);x=s.ref[x];x=inv(x,s.ir2,s.o2);x=inv(x,s.ir1,s.o1);x=inv(x,s.ir0,s.o0);return x}
-async function sig1(key,nonce,text){const s=await buildMachine(key,nonce);let out="";for(const c of cleanAZ(text)){step(s);out+=toCh(xform(toIdx(c),s))}return out}
-function nonce6(){const b=new Uint8Array(6);crypto.getRandomValues(b);return [...b].map(x=>toCh(x%26)).join("")}
+
+async function* byteStream(seed){
+  let b = await sha256(seed);
+  while(true){
+    yield* b;
+    b = await crypto.subtle.digest("SHA-256", b).then(x=>new Uint8Array(x));
+  }
+}
+
+async function buildMachine(key, nonce){
+  const stream = byteStream(`SIG1|${key}|${nonce}`);
+  const next = async()=> (await stream.next()).value;
+
+  async function randInt(n){
+    const lim = Math.floor(256/n)*n;
+    while(true){
+      const b = await next();
+      if(b < lim) return b % n;
+    }
+  }
+
+  async function rotor(){
+    const r=[...Array(26).keys()];
+    for(let i=25;i>0;i--){
+      const j = await randInt(i+1);
+      [r[i],r[j]]=[r[j],r[i]];
+    }
+    return r;
+  }
+
+  const r0=await rotor(), r1=await rotor(), r2=await rotor();
+  const inv = r => r.reduce((a,v,i)=>(a[v]=i,a),Array(26));
+  const ir0=inv(r0), ir1=inv(r1), ir2=inv(r2);
+
+  const ref = new Array(26).fill(-1);
+  const u=[...Array(26).keys()];
+  while(u.length){
+    const a=u.splice(await randInt(u.length),1)[0];
+    if((await randInt(100))<20 || !u.length){ ref[a]=a; continue; }
+    const b=u.splice(await randInt(u.length),1)[0];
+    ref[a]=b; ref[b]=a;
+  }
+
+  return {
+    r0,r1,r2,ir0,ir1,ir2,ref,
+    o0:(await next())%26,
+    o1:(await next())%26,
+    o2:(await next())%26
+  };
+}
+
+function step(s){
+  if(++s.o2===26){
+    s.o2=0;
+    if(++s.o1===26){
+      s.o1=0;
+      s.o0=(s.o0+1)%26;
+    }
+  }
+}
+
+const fwd=(x,r,o)=>mod26(r[mod26(x+o)]-o);
+const inv=(x,r,o)=>mod26(r[mod26(x+o)]-o);
+
+function xform(x,s){
+  x=fwd(x,s.r0,s.o0);
+  x=fwd(x,s.r1,s.o1);
+  x=fwd(x,s.r2,s.o2);
+  x=s.ref[x];
+  x=inv(x,s.ir2,s.o2);
+  x=inv(x,s.ir1,s.o1);
+  x=inv(x,s.ir0,s.o0);
+  return x;
+}
+
+async function sig1(key,nonce,text){
+  const s=await buildMachine(key,nonce);
+  let out="";
+  for(const c of cleanAZ(text)){
+    step(s);
+    out+=toCh(xform(toIdx(c),s));
+  }
+  return out;
+}
+
+function nonce6(){
+  const b=new Uint8Array(6);
+  crypto.getRandomValues(b);
+  return [...b].map(x=>toCh(x%26)).join("");
+}
+
+// UI
 function setMode(m){
-  el("panelDecrypt").style.display=m==="decrypt"?"":"none";
-  el("panelEncrypt").style.display=m==="encrypt"?"":"none";
+  el("panelDecrypt").style.display = m==="decrypt" ? "" : "none";
+  el("panelEncrypt").style.display = m==="encrypt" ? "" : "none";
   el("tabDecrypt").classList.toggle("active",m==="decrypt");
   el("tabEncrypt").classList.toggle("active",m==="encrypt");
 }
+
 el("tabDecrypt").onclick=()=>setMode("decrypt");
 el("tabEncrypt").onclick=()=>setMode("encrypt");
+
 el("btnDecrypt").onclick=async()=>{
   try{
-    const parts=el("payload").value.trim().toUpperCase().split(".");
-    if(parts.length!==3||parts[0]!=="SIG1") throw new Error("Bad payload format");
-    const n=cleanAZ(parts[1]),c=cleanAZ(parts[2]);
-    if(n.length!==6) throw new Error("Nonce must be 6 letters");
-    const pt=await sig1(el("key").value,n,c);
-    el("outPlain").value=pt;
+    const parts=el("payload").value.trim().split(".");
+    if(parts.length!==3 || parts[0]!=="SIG1") throw "Bad payload";
+    const pt=await sig1(el("key").value, parts[1], parts[2]);
+    el("outRaw").value=pt;
     el("outClean").value=pt.replace(/X/g," ");
-    el("statusD").innerHTML=`<span class="ok">Decrypted</span>`;
-  }catch(e){el("statusD").innerHTML=`<span class="err">${e.message}</span>`}
+  }catch(e){ alert("Decrypt failed"); }
 };
+
 el("btnEncrypt").onclick=async()=>{
-  try{
-    if(!el("nonce").value) el("nonce").value=nonce6();
-    const n=cleanAZ(el("nonce").value);
-    if(n.length!==6) throw new Error("Nonce must be 6 letters");
-    const ct=await sig1(el("key").value,n,el("plainIn").value);
-    el("cipherOut").value=ct;
-    el("payloadOut").value=`SIG1.${n}.${ct}`;
-    el("statusE").innerHTML=`<span class="ok">Encrypted</span>`;
-  }catch(e){el("statusE").innerHTML=`<span class="err">${e.message}</span>`}
+  if(!el("nonce").value) el("nonce").value=nonce6();
+  const ct=await sig1(el("key").value, el("nonce").value, el("plainIn").value);
+  el("cipherOut").value=ct;
+  el("payloadOut").value=`SIG1.${el("nonce").value}.${ct}`;
 };
+
 el("btnNonce").onclick=()=>el("nonce").value=nonce6();
-el("btnClearD").onclick=()=>{el("payload").value="";el("outPlain").value="";el("outClean").value="";el("statusD").textContent="";};
-el("btnClearE").onclick=()=>{el("plainIn").value="";el("cipherOut").value="";el("payloadOut").value="";el("statusE").textContent="";};
-el("nonce").value=nonce6();
+
 setMode("decrypt");
 </script>
 </body>
